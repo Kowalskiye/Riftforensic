@@ -1,0 +1,326 @@
+/* ============================================================
+   RIFT FORENSICS — Retro-Tech Design System
+   Palette: Neon Green + Cyan + Magenta on Deep Dark
+   Type: Space Mono (headings) · Inter (body) · JetBrains Mono (data)
+   ============================================================ */
+
+:root {
+  --font-retro: 'Space Mono', monospace;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --bg: #0A0A10;
+  --surface: #111118;
+  --border: rgba(0, 255, 159, 0.08);
+  --text: #D4D4E8;
+  --text-muted: #5A5A7A;
+  --accent: #00FF9F;
+  --danger: #FF3366;
+  --scrollbar-track: #0A0A10;
+  --scrollbar-thumb: #1E1E2E;
+  --scrollbar-hover: #2E2E44;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Smooth theme transitions ---- */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+canvas,
+input[type="range"],
+input[type="range"]::-webkit-slider-thumb,
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* ---- Base ---- */
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  position: relative;
+}
+
+/* CRT Scanline Overlay — very subtle */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  background: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.035) 2px,
+      rgba(0, 0, 0, 0.035) 4px);
+  mix-blend-mode: multiply;
+}
+
+/* Retro Grid Background */
+.retro-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 159, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 159, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+#root {
+  width: 100%;
+}
+
+/* ---- Scrollbars ---- */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+/* ---- Sidebar Tooltips ---- */
+.nav-tooltip {
+  position: absolute;
+  left: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--surface);
+  color: var(--accent);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: var(--font-retro);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s, left 0.12s !important;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 12px rgba(0, 255, 159, 0.1);
+  z-index: 200;
+}
+
+div:hover>.nav-tooltip {
+  opacity: 1;
+  left: 56px;
+}
+
+/* ---- Range Slider ---- */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 255, 159, 0.4);
+}
+
+/* ---- Chart Tooltip ---- */
+.chart-tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  box-shadow: 0 0 20px rgba(0, 255, 159, 0.1);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.12s ease !important;
+}
+
+.chart-tooltip.visible {
+  opacity: 1;
+}
+
+/* ---- Tab Morph Transition ---- */
+.tab-content {
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+.tab-exit {
+  opacity: 0 !important;
+  transform: translateY(12px) scale(0.98) !important;
+  transition: opacity 0.25s ease, transform 0.25s ease !important;
+}
+
+.tab-enter {
+  opacity: 0 !important;
+  transform: translateY(-8px) scale(0.99) !important;
+}
+
+/* ---- Keyframes ---- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes glowPulse {
+
+  0%,
+  100% {
+    text-shadow: 0 0 8px currentColor;
+  }
+
+  50% {
+    text-shadow: 0 0 16px currentColor, 0 0 32px currentColor;
+  }
+}
+
+@keyframes flicker {
+
+  0%,
+  97%,
+  100% {
+    opacity: 1;
+  }
+
+  98% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes terminalCursor {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes typeIn {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+/* ---- Theme Toggle ---- */
+.theme-toggle-icon {
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* ---- Retro Glow ---- */
+.glow-green {
+  text-shadow: 0 0 8px rgba(0, 255, 159, 0.6), 0 0 24px rgba(0, 255, 159, 0.2);
+}
+
+.glow-cyan {
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6), 0 0 24px rgba(0, 212, 255, 0.2);
+}
+
+.glow-pink {
+  text-shadow: 0 0 8px rgba(255, 51, 102, 0.6), 0 0 24px rgba(255, 51, 102, 0.2);
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: rgba(0, 255, 159, 0.2);
+  color: inherit;
+}
+
+/* ---- Terminal Cursor Blink ---- */
+.cursor-blink::after {
+  content: '█';
+  animation: terminalCursor 1s step-end infinite;
+  color: var(--accent);
+  margin-left: 2px;
+}
+
+/* ---- Retro Border Box ---- */
+.retro-box {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  position: relative;
+}
+
+.retro-box::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid transparent;
+  border-image: linear-gradient(135deg, var(--accent), transparent 50%, var(--danger)) 1;
+  pointer-events: none;
+}
