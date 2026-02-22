@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo, lazy, Suspense } from "react";
 
-const API_URL = "/api";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 // Lazy-load the isolated 3D Graph component
 const Graph3D = lazy(() => import("./Graph3D"));
